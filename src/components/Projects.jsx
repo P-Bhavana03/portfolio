@@ -3,19 +3,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Activity, ShoppingCart, Brain, Radio, Zap, Cpu, ArrowUpRight, X } from 'lucide-react';
 
 export default function Projects() {
-  const [activeFilter, setActiveFilter] = useState('all');
+  const [hoveredIndex, setHoveredIndex] = useState(0);
   const [selectedProject, setSelectedProject] = useState(null);
 
   const projects = [
     {
       id: 1,
-      title: 'BioPulse Monitor',
-      domain: 'Biomedical & Healthcare',
-      category: 'design',
+      title: 'Healthcare',
+      domain: 'Biomedical Patient Monitoring',
       tag: 'UI/UX Design',
       icon: Activity,
-      color: 'from-emerald-500 to-teal-500 text-emerald-400 bg-emerald-500/10 border-emerald-500/30',
-      glow: 'hover:shadow-[0_0_30px_rgba(16,185,129,0.3)]',
+      color: 'from-emerald-500 to-teal-500',
+      textColor: 'text-emerald-400',
       summary: 'Designed tablet and desktop dashboards for real-time biomedical patient monitoring, showing vitals graphs and critical warnings.',
       details: 'I structured the user experience to be zero-latency and highly scannable for hospital emergency rooms. Handled research phases for cognitive load limitations of physicians on night shifts.',
       tools: ['Figma', 'UX Research', 'DaVinci Resolve', 'GIMP'],
@@ -23,13 +22,12 @@ export default function Projects() {
     },
     {
       id: 2,
-      title: 'NexShop E-Commerce',
-      domain: 'E-Commerce Platforms',
-      category: 'dev',
+      title: 'E-Commerce',
+      domain: 'Consumer Shopping',
       tag: 'UX Design & Dev',
       icon: ShoppingCart,
-      color: 'from-indigo-500 to-blue-500 text-indigo-400 bg-indigo-500/10 border-indigo-500/30',
-      glow: 'hover:shadow-[0_0_30px_rgba(99,102,241,0.3)]',
+      color: 'from-indigo-500 to-blue-500',
+      textColor: 'text-indigo-400',
       summary: 'Designed and developed a premium checkout workflow for consumer shopping, lowering cart abandonment rates by 18%.',
       details: 'Implemented the frontend using React and Tailwind CSS. Built custom micro-interactions for adding items to the cart, editing payment methods, and reviewing delivery stages.',
       tools: ['VS Code', 'React', 'Framer', 'Tailwind CSS', 'Git'],
@@ -37,13 +35,12 @@ export default function Projects() {
     },
     {
       id: 3,
-      title: 'Sentient.AI Playground',
-      domain: 'Artificial Intelligence',
-      category: 'design',
+      title: 'Artificial Intelligence',
+      domain: 'LLM Prompt Playground',
       tag: 'Product Design',
       icon: Brain,
-      color: 'from-pink-500 to-purple-500 text-pink-400 bg-pink-500/10 border-pink-500/30',
-      glow: 'hover:shadow-[0_0_30px_rgba(236,72,153,0.3)]',
+      color: 'from-pink-500 to-purple-500',
+      textColor: 'text-pink-400',
       summary: 'Designed an interactive interface for prompting LLMs, reviewing tokens, and comparing output models side-by-side.',
       details: 'I created a modular workspace layout. Users can adjust parameters (temperature, Top-P) in sidebar drawers and test context window inputs with code-blocks and formatted tables.',
       tools: ['Figma', 'UX Research', 'Gemini', 'Canva'],
@@ -51,13 +48,12 @@ export default function Projects() {
     },
     {
       id: 4,
-      title: 'SmartGrid Telemetry',
-      domain: 'Energy Tech',
-      category: 'dev',
+      title: 'Energy',
+      domain: 'SmartGrid Telemetry',
       tag: 'UI Design & Dev',
       icon: Zap,
-      color: 'from-amber-500 to-orange-500 text-amber-400 bg-amber-500/10 border-amber-500/30',
-      glow: 'hover:shadow-[0_0_30px_rgba(245,158,11,0.3)]',
+      color: 'from-amber-500 to-orange-500',
+      textColor: 'text-amber-400',
       summary: 'Interactive web dashboards illustrating power supply grids, commercial battery parameters, and live outages.',
       details: 'Designed and developed the frontend system. Utilized clean reactive states to handle battery levels and show color-coded alert zones representing transformers under load.',
       tools: ['VS Code', 'Tailwind CSS', 'JavaScript', 'Figma'],
@@ -65,13 +61,12 @@ export default function Projects() {
     },
     {
       id: 5,
-      title: 'IoT Ambient Controller',
-      domain: 'Internet of Things',
-      category: 'design',
+      title: 'IoT',
+      domain: 'Ambient Controller',
       tag: 'Mobile App Design',
       icon: Radio,
-      color: 'from-cyan-500 to-blue-500 text-cyan-400 bg-cyan-500/10 border-cyan-500/30',
-      glow: 'hover:shadow-[0_0_30px_rgba(6,182,212,0.3)]',
+      color: 'from-cyan-500 to-blue-500',
+      textColor: 'text-cyan-400',
       summary: 'Mobile app UI designed for controlling ambient smart devices, air purifiers, and home temperature schedules.',
       details: 'Created high-fidelity mobile frames in dark and light modes. Configured custom color pickers and slide-to-adjust radial selectors representing fan speeds.',
       tools: ['Figma', 'Framer', 'Google Labs Flow', 'Canva'],
@@ -79,23 +74,18 @@ export default function Projects() {
     },
     {
       id: 6,
-      title: 'Telemetry Board Viewer',
-      domain: 'Embedded Systems',
-      category: 'dev',
+      title: 'Embedded Systems',
+      domain: 'Telemetry Board Viewer',
       tag: 'Front-End Dev',
       icon: Cpu,
-      color: 'from-rose-500 to-pink-500 text-rose-400 bg-rose-500/10 border-rose-500/30',
-      glow: 'hover:shadow-[0_0_30px_rgba(244,63,94,0.3)]',
+      color: 'from-rose-500 to-pink-500',
+      textColor: 'text-rose-400',
       summary: 'Telemetry viewer app developed to plot micro-controller sensor logs, voltages, and motor speeds.',
       details: 'Built a light web interface to capture serial logs. Parsed data blocks into real-time visual charts to help hardware engineers calibrate motor telemetry parameters during test phases.',
       tools: ['Antigravity', 'HTML/CSS', 'JavaScript', 'Git & GitHub'],
       features: ['Live terminal log console', 'Parsed graph plots', 'Calibration modifier controls']
     }
   ];
-
-  const filteredProjects = activeFilter === 'all'
-    ? projects
-    : projects.filter(p => p.category === activeFilter);
 
   return (
     <section id="projects" className="py-24 relative overflow-hidden bg-[#030712] border-t border-white/5">
@@ -127,91 +117,75 @@ export default function Projects() {
           </p>
         </motion.div>
 
-        {/* Filters */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="flex justify-center gap-3 mb-16"
-        >
-          {['all', 'design', 'dev'].map((filter) => (
-            <button
-              key={filter}
-              onClick={() => setActiveFilter(filter)}
-              className={`relative px-6 py-2.5 rounded-full font-display text-sm font-bold border transition-all duration-300 cursor-pointer overflow-hidden ${
-                activeFilter === filter
-                  ? 'text-white border-indigo-500 shadow-[0_0_20px_rgba(99,102,241,0.3)]'
-                  : 'text-slate-400 border-white/10 hover:text-white hover:border-white/30 bg-white/5'
-              }`}
-            >
-              {activeFilter === filter && (
-                <motion.div 
-                  layoutId="activeProjFilter" 
-                  className="absolute inset-0 bg-indigo-600 -z-10" 
-                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        {/* The Interactive Sliding Accordion (Projects) */}
+        <div className="flex flex-col md:flex-row w-full h-[650px] md:h-[500px] gap-2 lg:gap-3 p-2 rounded-[2rem] bg-white/[0.02] border border-white/5 shadow-2xl backdrop-blur-sm">
+          {projects.map((project, index) => {
+            const isActive = hoveredIndex === index;
+            const Icon = project.icon;
+            
+            return (
+              <div
+                key={project.id}
+                onMouseEnter={() => setHoveredIndex(index)}
+                onClick={() => setSelectedProject(project)}
+                className={`
+                  relative overflow-hidden rounded-[1.5rem] cursor-pointer group
+                  transition-[flex,border-color,background-color] duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]
+                  ${isActive ? 'bg-[#0f111a] border border-white/10 shadow-2xl' : 'bg-black/20 border border-transparent hover:bg-white/5'}
+                `}
+                style={{ flex: isActive ? 6 : 1 }}
+              >
+                
+                {/* Colored background glow that reveals on hover/active */}
+                <div 
+                  className={`absolute inset-0 bg-gradient-to-br ${project.color} transition-opacity duration-500 ${isActive ? 'opacity-20' : 'opacity-0'}`} 
                 />
-              )}
-              {filter === 'all' ? 'All Work' : filter === 'design' ? 'UI/UX Design' : 'Design & Dev'}
-            </button>
-          ))}
-        </motion.div>
 
-        {/* Projects Grid */}
-        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <AnimatePresence mode="popLayout">
-            {filteredProjects.map((project) => {
-              const Icon = project.icon;
-              return (
-                <motion.div
-                  layout
-                  layoutId={`project-${project.id}`}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.4 }}
-                  key={project.id}
-                  onClick={() => setSelectedProject(project)}
-                  className={`group rounded-3xl p-8 bg-white/5 backdrop-blur-md border border-white/10 text-left transition-all duration-500 hover:-translate-y-2 hover:bg-white/10 ${project.glow} cursor-pointer flex flex-col justify-between overflow-hidden relative`}
-                >
-                  <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl ${project.color} opacity-10 rounded-full blur-[40px] group-hover:opacity-30 transition-opacity duration-500`} />
+                {/* Content Wrapper */}
+                <div className={`absolute inset-0 flex ${isActive ? 'flex-col justify-between items-start p-6 md:p-8' : 'flex-row md:flex-col justify-center items-center'} w-full h-full`}>
                   
-                  <div className="relative z-10">
-                    {/* Domain Tag Bar */}
-                    <div className="flex items-center justify-between mb-8">
-                      <span className={`text-[10px] font-bold font-mono px-3 py-1.5 rounded-full border ${project.color}`}>
-                        {project.tag}
-                      </span>
-                      <span className="text-xs text-slate-500 font-mono font-medium tracking-widest">
-                        0{project.id}
-                      </span>
-                    </div>
+                  {/* Icon */}
+                  <div className={`shrink-0 flex items-center justify-center transition-transform duration-500 ${isActive ? 'w-14 h-14 rounded-2xl bg-black/50 border border-white/10 mb-4' : 'w-10 h-10 rounded-full bg-white/5 border border-white/5 opacity-50 group-hover:scale-110'}`}>
+                    <Icon className={`w-6 h-6 ${isActive ? project.textColor : 'text-slate-500'}`} />
+                  </div>
 
-                    {/* Icon Header */}
-                    <div className="w-14 h-14 rounded-2xl bg-black/50 border border-white/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 shadow-inner">
-                      <Icon className={`w-7 h-7 ${project.color.split(' ')[2]}`} />
-                    </div>
-
-                    <h3 className="font-display font-extrabold text-2xl text-white mb-2 group-hover:text-indigo-400 transition-colors duration-300 tracking-wide">
+                  {/* Text Details - Crossfades and slides in when active */}
+                  <div 
+                    className={`flex flex-col transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${isActive ? 'opacity-100 translate-y-0 translate-x-0' : 'opacity-0 md:translate-y-8 translate-x-8 md:translate-x-0'}`}
+                    style={{ position: isActive ? 'relative' : 'absolute', pointerEvents: isActive ? 'auto' : 'none' }}
+                  >
+                    <span className={`text-[10px] md:text-xs font-bold uppercase tracking-widest font-mono ${project.textColor} drop-shadow-md mb-2`}>
+                      {project.tag}
+                    </span>
+                    <h3 className="font-display font-black text-2xl lg:text-3xl xl:text-4xl text-white tracking-wide mb-3 drop-shadow-md">
                       {project.title}
                     </h3>
-                    <p className="text-xs text-slate-400 font-medium font-mono uppercase tracking-widest mb-4">
-                      {project.domain}
-                    </p>
-                    <p className="text-slate-400 text-sm leading-relaxed mb-6 font-light">
+                    <p className="text-slate-300 text-sm leading-relaxed max-w-sm hidden md:block">
                       {project.summary}
                     </p>
+                    
+                    <div className="mt-6 flex items-center text-xs font-bold uppercase tracking-widest text-white/50 group-hover:text-white transition-colors">
+                      View Details <ArrowUpRight className="ml-1 w-4 h-4" />
+                    </div>
                   </div>
 
-                  <div className="pt-5 border-t border-white/10 flex items-center justify-between text-xs text-indigo-400 font-bold tracking-widest uppercase relative z-10">
-                    <span>View Details</span>
-                    <ArrowUpRight className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
-                  </div>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-        </motion.div>
+                  {/* Rotated ID for inactive state */}
+                  {!isActive && (
+                    <span className="hidden md:block absolute bottom-8 text-xs font-mono font-bold text-slate-600 rotate-[-90deg]">
+                      0{project.id}
+                    </span>
+                  )}
+                  {!isActive && (
+                    <span className="md:hidden ml-4 text-xs font-mono font-bold text-slate-600">
+                      0{project.id}
+                    </span>
+                  )}
+
+                </div>
+              </div>
+            );
+          })}
+        </div>
 
       </div>
 
@@ -229,7 +203,9 @@ export default function Projects() {
             />
             
             <motion.div 
-              layoutId={`project-${selectedProject.id}`}
+              initial={{ opacity: 0, y: 50, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.95 }}
               className="relative w-full max-w-3xl bg-[#0a0a0a] rounded-3xl border border-white/10 p-8 sm:p-12 shadow-2xl text-left overflow-hidden z-10 max-h-[90vh] overflow-y-auto custom-scrollbar"
             >
               <div className={`absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl ${selectedProject.color} opacity-10 rounded-full blur-[80px] pointer-events-none`} />
@@ -243,7 +219,7 @@ export default function Projects() {
 
               <div className="relative z-10">
                 <div className="mb-10 space-y-4">
-                  <span className={`inline-block text-xs font-mono font-bold px-4 py-1.5 rounded-full border ${selectedProject.color}`}>
+                  <span className={`inline-block text-xs font-mono font-bold px-4 py-1.5 rounded-full border border-white/10 ${selectedProject.textColor} bg-white/5`}>
                     {selectedProject.tag}
                   </span>
                   <h3 className="font-display font-black text-4xl sm:text-5xl text-white tracking-tight">
@@ -271,7 +247,7 @@ export default function Projects() {
                     <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-slate-300 font-light">
                       {selectedProject.features.map((feature, i) => (
                         <li key={i} className="flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/5">
-                          <span className={`w-2 h-2 rounded-full shrink-0 ${selectedProject.color.split(' ')[0].replace('from-', 'bg-')}`} />
+                          <span className={`w-2 h-2 rounded-full shrink-0 bg-white`} />
                           {feature}
                         </li>
                       ))}

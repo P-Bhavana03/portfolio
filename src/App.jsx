@@ -3,26 +3,23 @@ import { motion, useScroll } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Story from './components/Story';
-import Tools from './components/Tools';
+import ToolsOrbit from './components/ToolsOrbit';
 import Services from './components/Services';
 import Projects from './components/Projects';
 import Skills from './components/Skills';
 import Experience from './components/Experience';
 import Contact from './components/Contact';
-import CustomCursor from './components/CustomCursor';
 
 export default function App() {
   const { scrollYProgress } = useScroll();
 
   useEffect(() => {
     // Force dark mode globally
-    document.documentElement.classList.add('dark');
-    document.documentElement.style.cursor = 'none'; // Hide default cursor if you want full custom cursor experience
-  }, []);
+    // Ensure scroll is at top on load
+    window.scrollTo(0, 0);  }, []);
 
   return (
-    <div className="min-h-screen transition-colors duration-300 w-full mesh-gradient-dark text-slate-100 overflow-x-hidden selection:bg-indigo-500/30 selection:text-indigo-200">
-      <CustomCursor />
+    <div className="bg-[#030712] min-h-screen font-sans selection:bg-indigo-500/30 selection:text-indigo-200 overflow-hidden">
       
 
 
@@ -38,7 +35,7 @@ export default function App() {
         <Story />
 
         {/* Tools Section */}
-        <Tools />
+        <ToolsOrbit />
 
         {/* Services Section */}
         <Services />

@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import HTMLFlipBook from 'react-pageflip';
+import { motion } from 'framer-motion';
 import { Search, PenTool, Palette, Layers, Code, ChevronRight } from 'lucide-react';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, Stars } from '@react-three/drei';
 
 const Page = React.forwardRef(({ children, className = '', density = 'soft', isLeft }, ref) => {
   return (
@@ -73,7 +76,7 @@ export default function Story() {
 
   // Page 0: Front Cover (Right Page when closed)
   bookPages.push(
-    <Page key="cover-front" density="hard" isLeft={false} className="bg-gradient-to-br from-[#151520] to-[#0a0a0f] rounded-r-xl border-y border-r border-white/10 shadow-[5px_5px_20px_rgba(0,0,0,0.5)]">
+    <Page key="cover-front" density="hard" isLeft={false} className="bg-gradient-to-br from-[#1c1d29] to-[#13141f] rounded-r-xl border-y border-r border-white/20 shadow-[5px_5px_30px_rgba(0,0,0,0.8)]">
        <div className="h-full flex flex-col items-center justify-center p-8 md:p-12 text-center relative">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-indigo-500/20 blur-[60px] rounded-full pointer-events-none" />
           
@@ -102,7 +105,7 @@ export default function Story() {
 
   // Page 1: Inside Front Cover (Left Page)
   bookPages.push(
-    <Page key="cover-inside" isLeft={true} className="bg-[#050508]" />
+    <Page key="cover-inside" isLeft={true} className="bg-[#0f1017]" />
   );
 
   // Pages 2 to 10: Content
@@ -111,10 +114,9 @@ export default function Story() {
      
      // The Right Page (Phase Content)
      bookPages.push(
-        <Page key={`phase-${index}-right`} isLeft={false} className="bg-[#0a0a0f]">
+        <Page key={`phase-${index}-right`} isLeft={false} className="bg-[#13141f] border-r border-white/10">
            <div className="p-8 md:p-12 h-full flex flex-col relative">
               <div className="mb-10">
-                <span className="text-5xl md:text-6xl font-black text-white/5 absolute top-8 right-8 pointer-events-none">0{index + 1}</span>
                 <div className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br ${phase.color} shadow-lg flex items-center justify-center mb-6 relative z-10`}>
                    <Icon className="w-6 h-6 md:w-8 md:h-8 text-white" />
                 </div>
@@ -147,14 +149,14 @@ export default function Story() {
      // The Left Page (Blank/Back of the previous page)
      if (index < phases.length - 1) {
         bookPages.push(
-          <Page key={`phase-${index}-left`} isLeft={true} className="bg-[#050508]" />
+          <Page key={`phase-${index}-left`} isLeft={true} className="bg-[#0f1017] border-l border-white/10" />
         );
      }
   });
 
   // Page 11: Back Cover (Hard - Left Page when closed)
   bookPages.push(
-    <Page key="cover-back" density="hard" isLeft={true} className="bg-gradient-to-tl from-[#151520] to-[#0a0a0f] rounded-l-xl border-y border-l border-white/10 shadow-[-5px_5px_20px_rgba(0,0,0,0.5)]">
+    <Page key="cover-back" density="hard" isLeft={true} className="bg-gradient-to-tl from-[#1c1d29] to-[#13141f] rounded-l-xl border-y border-l border-white/20 shadow-[-5px_5px_30px_rgba(0,0,0,0.8)]">
        <div className="h-full flex items-center justify-center relative">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-indigo-500/10 blur-[40px] rounded-full pointer-events-none" />
           <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.02)] relative z-10">
@@ -164,9 +166,85 @@ export default function Story() {
     </Page>
   );
 
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMousePosition({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
+  // Generate some static random positions for floating particles so they don't jump on re-render
+  const [particles] = useState(() => 
+    Array.from({ length: 20 }).map(() => ({
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      duration: Math.random() * 10 + 15,
+      delay: Math.random() * 5
+    }))
+  );
+
   return (
-    <section id="story" className="py-24 relative overflow-hidden bg-[#030712] border-t border-white/5 min-h-screen flex flex-col justify-center">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-indigo-900/10 rounded-full blur-[150px] pointer-events-none" />
+    <section 
+      id="story" 
+      onMouseMove={handleMouseMove}
+      className="py-24 relative overflow-hidden bg-[#030712] border-t border-white/5 min-h-screen flex flex-col justify-center"
+    >
+      {/* 3D Stars Background */}
+      <div className="absolute inset-0 z-0 opacity-80 mix-blend-screen pointer-events-none">
+        <Canvas camera={{ position: [0, 0, 8] }}>
+          <Stars radius={100} depth={50} count={4000} factor={4} saturation={1} fade speed={1.5} />
+          <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.5} />
+        </Canvas>
+      </div>
+
+      {/* 1. Dot Grid Pattern */}
+      <div 
+        className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none" 
+        style={{ backgroundImage: 'radial-gradient(circle at center, white 1px, transparent 1px)', backgroundSize: '40px 40px' }}
+      />
+
+      {/* 2. Interactive Mouse Spotlight */}
+      <motion.div 
+        className="absolute pointer-events-none z-0 rounded-full blur-[100px]"
+        animate={{
+          x: mousePosition.x - 250,
+          y: mousePosition.y - 250,
+        }}
+        transition={{ type: "spring", damping: 40, stiffness: 200, mass: 0.5 }}
+        style={{ 
+          width: 500, 
+          height: 500, 
+          background: 'radial-gradient(circle, rgba(99,102,241,0.15) 0%, rgba(236,72,153,0.05) 50%, transparent 70%)' 
+        }}
+      />
+
+      {/* 3. Ambient Glowing Orbs */}
+      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none z-0 animate-pulse" style={{ animationDuration: '7s' }} />
+      <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[150px] pointer-events-none z-0 animate-pulse" style={{ animationDuration: '10s' }} />
+
+      {/* 4. Floating Dust Particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        {particles.map((particle, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-white/20 rounded-full"
+            style={{ left: particle.left, top: particle.top }}
+            animate={{
+              y: [0, -100, 0],
+              opacity: [0.1, 0.5, 0.1],
+            }}
+            transition={{
+              duration: particle.duration,
+              delay: particle.delay,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+          />
+        ))}
+      </div>
 
       <div className="w-full max-w-7xl mx-auto px-4 relative z-10 flex flex-col items-center">
         
