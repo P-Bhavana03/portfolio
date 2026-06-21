@@ -1,236 +1,191 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Search, PenTool, Palette, Layers, Code, ArrowRight, ArrowLeft } from 'lucide-react';
+import React from 'react';
+import HTMLFlipBook from 'react-pageflip';
+import { Search, PenTool, Palette, Layers, Code, ChevronRight } from 'lucide-react';
+
+const Page = React.forwardRef(({ children, className = '', density = 'soft', isLeft }, ref) => {
+  return (
+    <div 
+      className={`bg-[#0f111a] overflow-hidden relative ${className}`} 
+      ref={ref} 
+      data-density={density}
+    >
+      {/* Subtle paper noise texture */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} />
+      
+      {/* Spine shadow for 3D depth */}
+      <div className={`absolute inset-y-0 ${isLeft ? 'right-0 bg-gradient-to-l' : 'left-0 bg-gradient-to-r'} w-12 md:w-16 from-black/90 via-black/30 to-transparent pointer-events-none z-10`} />
+      
+      {/* Edge lighting for paper */}
+      <div className={`absolute inset-y-0 ${isLeft ? 'left-0' : 'right-0'} w-[1px] bg-white/10 z-10`} />
+      
+      <div className="relative z-20 h-full w-full">
+        {children}
+      </div>
+    </div>
+  );
+});
 
 export default function Story() {
-  const [currentPage, setCurrentPage] = useState(0);
-  const [isFlipping, setIsFlipping] = useState(false);
-  const [flipDirection, setFlipDirection] = useState('next');
-  const [animatingPage, setAnimatingPage] = useState(0);
-
   const phases = [
     {
       title: 'UX Research & Strategy',
       subtitle: 'Understanding the problem',
       icon: Search,
       color: 'from-cyan-500 to-blue-500',
-      shadow: 'shadow-cyan-500/30',
       description: 'Before drawing a single line, I dig deep into the target user base and business goals. I synthesize qualitative data, structure hierarchies, and map flows.',
-      details: [
-        'User Personas',
-        'Journeys & Flows',
-        'AI Synthesis'
-      ]
+      details: ['User Personas', 'Journeys & Flows', 'AI Synthesis']
     },
     {
       title: 'Wireframing & Media',
       subtitle: 'Building the skeleton',
       icon: PenTool,
       color: 'from-indigo-500 to-purple-500',
-      shadow: 'shadow-indigo-500/30',
       description: 'I translate raw requirements into structured layouts. Low-fidelity wireframes establish hierarchy, paired with gathering foundational media assets.',
-      details: [
-        'Information Architecture',
-        'Lo-Fi Wireframes',
-        'Media Curation'
-      ]
+      details: ['Information Architecture', 'Lo-Fi Wireframes', 'Media Curation']
     },
     {
       title: 'Final Design',
       subtitle: 'Crafting brand identity',
       icon: Palette,
       color: 'from-pink-500 to-rose-500',
-      shadow: 'shadow-pink-500/30',
       description: 'Aesthetics matter. I apply harmonious color palettes, custom logos, typography, and polished visual elements to transform raw wireframes into beautiful UI.',
-      details: [
-        'Hi-Fi Interface Design',
-        'Color Systems',
-        'Custom Iconography'
-      ]
+      details: ['Hi-Fi Interface Design', 'Color Systems', 'Custom Iconography']
     },
     {
       title: 'Prototyping',
       subtitle: 'Breathing life into static designs',
       icon: Layers,
       color: 'from-orange-500 to-amber-500',
-      shadow: 'shadow-orange-500/30',
       description: 'I link the high-fidelity screens together using advanced prototyping. This includes testing micro-interactions and validating usability flows before coding.',
-      details: [
-        'Advanced Prototyping',
-        'Micro-Interactions',
-        'Flow Validation'
-      ]
+      details: ['Advanced Prototyping', 'Micro-Interactions', 'Flow Validation']
     },
     {
       title: 'Frontend Development',
       subtitle: 'Transforming designs to code',
       icon: Code,
       color: 'from-emerald-500 to-teal-500',
-      shadow: 'shadow-emerald-500/30',
       description: 'I bridge the gap between Figma and code. I write clean, responsive frontend layouts using React, Tailwind CSS, and Vite, while handling deployments.',
-      details: [
-        'Responsive Fluid Layouts',
-        'React Architecture',
-        'Cloud Deployment'
-      ]
+      details: ['Responsive Fluid Layouts', 'React Architecture', 'Cloud Deployment']
     }
   ];
 
-  const turnPage = (direction) => {
-    if (isFlipping) return;
-    if (direction === 'next' && currentPage < phases.length - 1) {
-      setFlipDirection('next');
-      setAnimatingPage(currentPage);
-      setIsFlipping(true);
-      setTimeout(() => {
-        setCurrentPage(c => c + 1);
-        setIsFlipping(false);
-      }, 800);
-    } else if (direction === 'prev' && currentPage > 0) {
-      setFlipDirection('prev');
-      setAnimatingPage(currentPage - 1);
-      setIsFlipping(true);
-      setTimeout(() => {
-        setCurrentPage(c => c - 1);
-        setIsFlipping(false);
-      }, 800);
-    }
-  };
+  const bookPages = [];
 
-  const renderLeftPage = (index) => {
-    const phase = phases[index];
-    if (!phase) return null;
-    const Icon = phase.icon;
-    return (
-      <div className="w-full h-full p-6 md:p-10 flex flex-col justify-between relative z-10">
-        <div>
-           <span className="text-4xl md:text-6xl font-black text-white/5">0{index + 1}</span>
-        </div>
-        <div className="flex-1 flex items-center justify-center">
-           <div className={`w-24 h-24 md:w-32 md:h-32 rounded-full bg-gradient-to-br ${phase.color} shadow-2xl ${phase.shadow} flex items-center justify-center`}>
-              <Icon className="w-10 h-10 md:w-16 md:h-16 text-white" />
-           </div>
-        </div>
-        <div>
-           <h3 className="font-display font-black text-2xl md:text-4xl text-white mb-2 leading-tight">{phase.title}</h3>
-           <p className="text-slate-400 text-xs md:text-sm tracking-widest uppercase">{phase.subtitle}</p>
-        </div>
-      </div>
-    );
-  };
-
-  const renderRightPage = (index) => {
-    const phase = phases[index];
-    if (!phase) return null;
-    return (
-      <div className="w-full h-full p-6 md:p-12 flex flex-col justify-center relative z-10">
-         <p className="text-slate-300 text-sm md:text-lg leading-relaxed font-light mb-8 md:mb-12">
-            {phase.description}
-         </p>
-         <div className="space-y-5">
-            <h4 className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">Core Action Items</h4>
-            {phase.details.map((detail, idx) => (
-              <div key={idx} className="flex items-center gap-4">
-                 <span className={`w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-gradient-to-r ${phase.color} shadow-lg`} />
-                 <span className="text-slate-200 text-sm md:text-base font-medium">{detail}</span>
-              </div>
-            ))}
-         </div>
-      </div>
-    );
-  };
-
-  const PageBackground = ({ isLeft }) => (
-    <div className={`absolute inset-0 bg-[#0a0a0f] border-y border-white/10 ${isLeft ? 'border-l rounded-l-3xl' : 'border-r rounded-r-3xl'}`}>
-       <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
-       {/* Book spine shadow */}
-       <div className={`absolute top-0 bottom-0 w-8 md:w-16 pointer-events-none ${isLeft ? 'right-0 bg-gradient-to-l' : 'left-0 bg-gradient-to-r'} from-black/80 to-transparent`} />
-    </div>
-  );
-
-  const staticLeftIdx = isFlipping ? animatingPage : currentPage;
-  const staticRightIdx = isFlipping ? animatingPage + 1 : currentPage;
-
-  return (
-    <section id="story" className="py-24 md:py-32 relative overflow-hidden bg-[#030712] border-t border-white/5">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-indigo-900/10 rounded-full blur-[150px] pointer-events-none" />
-
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
-        
-        <div className="text-center mb-16">
-          <span className="text-xs font-semibold px-4 py-1.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 uppercase tracking-widest shadow-[0_0_15px_rgba(99,102,241,0.15)] mb-4 inline-block">
+  // Page 0: Front Cover (Right Page when closed)
+  bookPages.push(
+    <Page key="cover-front" density="hard" isLeft={false} className="bg-gradient-to-br from-[#151520] to-[#0a0a0f] rounded-r-xl border-y border-r border-white/10 shadow-[5px_5px_20px_rgba(0,0,0,0.5)]">
+       <div className="h-full flex flex-col items-center justify-center p-8 md:p-12 text-center relative">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-indigo-500/20 blur-[60px] rounded-full pointer-events-none" />
+          
+          <span className="text-[10px] md:text-xs font-bold px-4 py-1.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 uppercase tracking-widest shadow-lg mb-8 relative z-10">
             The Workflow
           </span>
-          <h2 className="font-display font-black text-4xl sm:text-6xl text-white tracking-tight mb-4">
-            Interactive <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">Storybook</span>
-          </h2>
-          <p className="text-slate-400 text-lg">Turn the pages to explore my design and development process.</p>
-        </div>
-
-        {/* 3D Book Container */}
-        <div className="relative w-full aspect-[4/3] md:aspect-[2/1] min-h-[450px] md:min-h-[500px] max-w-5xl mx-auto mb-20" style={{ perspective: '2500px' }}>
           
-          {/* Static Left Page */}
-          <div className="absolute left-0 w-1/2 h-full z-0">
-             <PageBackground isLeft={true} />
-             {renderLeftPage(staticLeftIdx)}
+          <h2 className="font-display font-black text-4xl md:text-5xl text-white tracking-tight mb-6 leading-tight relative z-10">
+            Interactive <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">Storybook</span>
+          </h2>
+          
+          <div className="w-16 h-[2px] bg-gradient-to-r from-transparent via-white/20 to-transparent mb-6 relative z-10" />
+          
+          <p className="text-slate-400 text-xs md:text-sm font-light leading-relaxed max-w-[250px] relative z-10">
+            Drag the edge of the page to open the book and explore my process.
+          </p>
+          
+          <div className="absolute bottom-10 right-10 flex items-center gap-2 text-indigo-400/60 animate-pulse">
+            <span className="text-[10px] uppercase tracking-widest font-mono">Drag</span>
+            <ChevronRight className="w-4 h-4" />
           </div>
+       </div>
+    </Page>
+  );
 
-          {/* Static Right Page */}
-          <div className="absolute right-0 w-1/2 h-full z-0">
-             <PageBackground isLeft={false} />
-             {renderRightPage(staticRightIdx)}
-          </div>
+  // Page 1: Inside Front Cover (Left Page)
+  bookPages.push(
+    <Page key="cover-inside" isLeft={true} className="bg-[#050508]" />
+  );
 
-          {/* Flipping Page */}
-          {isFlipping && (
-            <motion.div
-              initial={{ rotateY: flipDirection === 'next' ? 0 : -180 }}
-              animate={{ rotateY: flipDirection === 'next' ? -180 : 0 }}
-              transition={{ duration: 0.8, ease: "easeInOut" }}
-              className="absolute left-1/2 w-1/2 h-full origin-left z-20"
-              style={{ transformStyle: 'preserve-3d', WebkitTransformStyle: 'preserve-3d' }}
-            >
-               {/* Front Side */}
-               <div className="absolute inset-0" style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}>
-                 <PageBackground isLeft={false} />
-                 {renderRightPage(animatingPage)}
-               </div>
+  // Pages 2 to 10: Content
+  phases.forEach((phase, index) => {
+     const Icon = phase.icon;
+     
+     // The Right Page (Phase Content)
+     bookPages.push(
+        <Page key={`phase-${index}-right`} isLeft={false} className="bg-[#0a0a0f]">
+           <div className="p-8 md:p-12 h-full flex flex-col relative">
+              <div className="mb-10">
+                <span className="text-5xl md:text-6xl font-black text-white/5 absolute top-8 right-8 pointer-events-none">0{index + 1}</span>
+                <div className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br ${phase.color} shadow-lg flex items-center justify-center mb-6 relative z-10`}>
+                   <Icon className="w-6 h-6 md:w-8 md:h-8 text-white" />
+                </div>
+                <h3 className="font-display font-black text-2xl md:text-3xl text-white mb-2 leading-tight relative z-10">{phase.title}</h3>
+                <p className="text-indigo-400 text-[10px] md:text-xs tracking-widest uppercase font-mono relative z-10">{phase.subtitle}</p>
+              </div>
+              
+              <div className="flex-1 relative z-10">
+                 <p className="text-slate-300 text-sm md:text-base leading-relaxed font-light mb-8">
+                    {phase.description}
+                 </p>
+                 <div className="space-y-4">
+                    <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-4">Core Action Items</h4>
+                    {phase.details.map((detail, idx) => (
+                      <div key={idx} className="flex items-center gap-3">
+                         <span className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${phase.color} shadow-lg shrink-0`} />
+                         <span className="text-slate-200 text-xs md:text-sm font-medium">{detail}</span>
+                      </div>
+                    ))}
+                 </div>
+              </div>
 
-               {/* Back Side */}
-               <div className="absolute inset-0" style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}>
-                 <PageBackground isLeft={true} />
-                 {renderLeftPage(animatingPage + 1)}
-               </div>
-            </motion.div>
-          )}
-
-        </div>
-
-        {/* Controls */}
-        <div className="flex items-center justify-center gap-6 md:gap-10">
-           <button 
-             onClick={() => turnPage('prev')}
-             disabled={currentPage === 0 || isFlipping}
-             className="group p-4 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:scale-110 disabled:opacity-30 disabled:hover:scale-100 disabled:cursor-not-allowed transition-all shadow-lg"
-           >
-             <ArrowLeft className="w-6 h-6 group-hover:-translate-x-1 transition-transform" />
-           </button>
-           <div className="flex flex-col items-center">
-             <span className="text-white font-display font-bold text-xl">
-               Phase {currentPage + 1} <span className="text-slate-500">/ {phases.length}</span>
-             </span>
-             <span className="text-xs text-slate-500 uppercase tracking-widest mt-1 font-mono">
-               Turn Page
-             </span>
+              <div className="mt-auto flex justify-between items-center text-slate-600 relative z-10">
+                 <span className="text-[10px] uppercase tracking-widest font-mono">Page 0{index + 1}</span>
+              </div>
            </div>
-           <button 
-             onClick={() => turnPage('next')}
-             disabled={currentPage === phases.length - 1 || isFlipping}
-             className="group p-4 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:scale-110 disabled:opacity-30 disabled:hover:scale-100 disabled:cursor-not-allowed transition-all shadow-lg"
-           >
-             <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
-           </button>
+        </Page>
+     );
+     
+     // The Left Page (Blank/Back of the previous page)
+     if (index < phases.length - 1) {
+        bookPages.push(
+          <Page key={`phase-${index}-left`} isLeft={true} className="bg-[#050508]" />
+        );
+     }
+  });
+
+  // Page 11: Back Cover (Hard - Left Page when closed)
+  bookPages.push(
+    <Page key="cover-back" density="hard" isLeft={true} className="bg-gradient-to-tl from-[#151520] to-[#0a0a0f] rounded-l-xl border-y border-l border-white/10 shadow-[-5px_5px_20px_rgba(0,0,0,0.5)]">
+       <div className="h-full flex items-center justify-center relative">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-indigo-500/10 blur-[40px] rounded-full pointer-events-none" />
+          <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.02)] relative z-10">
+            <span className="text-slate-500 font-display font-bold uppercase tracking-widest text-xs">End</span>
+          </div>
+       </div>
+    </Page>
+  );
+
+  return (
+    <section id="story" className="py-24 relative overflow-hidden bg-[#030712] border-t border-white/5 min-h-screen flex flex-col justify-center">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-indigo-900/10 rounded-full blur-[150px] pointer-events-none" />
+
+      <div className="w-full max-w-7xl mx-auto px-4 relative z-10 flex flex-col items-center">
+        
+        {/* Book Container */}
+        <div className="w-full flex justify-center perspective-[3000px]">
+          <HTMLFlipBook 
+            width={450} 
+            height={650} 
+            size="stretch"
+            minWidth={300}
+            maxWidth={500}
+            minHeight={400}
+            maxHeight={700}
+            showCover={true}
+            mobileScrollSupport={true}
+            className="storybook-container drop-shadow-[0_20px_50px_rgba(0,0,0,0.6)]"
+          >
+            {bookPages}
+          </HTMLFlipBook>
         </div>
 
       </div>
