@@ -104,49 +104,7 @@ export default function Skills() {
           </motion.div>
         </div>
 
-        {/* Bottom Feature Box */}
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="max-w-4xl mx-auto rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 p-8 sm:p-12 text-left transition-all duration-300 hover:shadow-[0_0_30px_rgba(99,102,241,0.15)] hover:border-indigo-500/30 flex flex-col sm:flex-row gap-10 items-center group relative overflow-hidden"
-        >
-          <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-[80px] pointer-events-none" />
 
-          <div className="flex-1 relative z-10">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="p-3 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/20">
-                <Globe className="w-6 h-6" />
-              </div>
-              <h3 className="font-display font-black text-2xl text-white">
-                Multi-Domain Integration
-              </h3>
-            </div>
-            <p className="text-slate-400 text-base leading-relaxed font-light">
-              Whether deploying layouts for energy telemetry grids or designing interfaces for medical heart monitors, I focus on the connection of user flows, visual clarity, and clean backend databases.
-            </p>
-          </div>
-          
-          {/* Visual Mini Board */}
-          <div className="w-full sm:w-64 p-5 rounded-2xl bg-black/50 border border-white/10 flex flex-col gap-3 font-mono text-xs text-slate-400 relative z-10 shadow-inner">
-            <div className="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5 group-hover:border-emerald-500/30 transition-colors">
-              <span className="font-bold text-white tracking-wide">AWS Deploy</span>
-              <span className="text-emerald-400 flex items-center gap-2">
-                <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
-                ONLINE
-              </span>
-            </div>
-            <div className="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5 group-hover:border-indigo-500/30 transition-colors">
-              <span className="font-bold text-white tracking-wide">Git Commits</span>
-              <span className="text-indigo-400">12+ Daily</span>
-            </div>
-            <div className="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5 group-hover:border-cyan-500/30 transition-colors">
-              <span className="font-bold text-white tracking-wide">SQL Queries</span>
-              <span className="text-cyan-400">Optimized</span>
-            </div>
-          </div>
-        </motion.div>
 
       </div>
     </section>

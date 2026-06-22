@@ -1,4 +1,6 @@
 import React from 'react';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, Stars } from '@react-three/drei';
 
 import figmaIcon from '../assets/app_icons/devicon--figma.svg';
 import framerIcon from '../assets/app_icons/bxl--framer.svg';
@@ -17,27 +19,27 @@ export default function ToolsOrbit() {
 
   // 5 items
   const innerRing = [
-    { name: 'Figma', icon: figmaIcon },
-    { name: 'Canva', icon: canvaIcon, filter: 'invert(48%) sepia(87%) saturate(2258%) hue-rotate(152deg) brightness(97%) contrast(104%)' },
-    { name: 'VS Code', icon: vscodeIcon },
-    { name: 'GIMP', icon: gimpIcon },
-    { name: 'ChatGPT', icon: chatgptIcon, invert: true },
+    { name: 'Figma', icon: figmaIcon, usage: 'UI Prototyping' },
+    { name: 'Canva', icon: canvaIcon, filter: 'invert(48%) sepia(87%) saturate(2258%) hue-rotate(152deg) brightness(97%) contrast(104%)', usage: 'Social Graphics' },
+    { name: 'VS Code', icon: vscodeIcon, usage: 'Frontend Coding' },
+    { name: 'GIMP', icon: gimpIcon, usage: 'Image Editing' },
+    { name: 'ChatGPT', icon: chatgptIcon, invert: true, usage: 'Code Assistance' },
   ];
 
   // 6 items
   const outerRing = [
-    { name: 'Framer', icon: framerIcon, invert: true },
-    { name: 'DaVinci', icon: davinciIcon, filter: 'invert(37%) sepia(51%) saturate(3020%) hue-rotate(340deg) brightness(101%) contrast(92%)' },
-    { name: 'Gemini', icon: geminiIcon },
-    { name: 'Claude', icon: claudeIcon },
-    { name: 'Google Labs', icon: googleLabsIcon },
-    { name: 'Antigravity', icon: antigravityIcon, filter: 'invert(1)' },
+    { name: 'Framer', icon: framerIcon, invert: true, usage: 'Web Animations' },
+    { name: 'DaVinci', icon: davinciIcon, filter: 'invert(37%) sepia(51%) saturate(3020%) hue-rotate(340deg) brightness(101%) contrast(92%)', usage: 'Video Editing' },
+    { name: 'Gemini', icon: geminiIcon, usage: 'AI Reasoning' },
+    { name: 'Claude', icon: claudeIcon, usage: 'Creative Writing' },
+    { name: 'Google Labs', icon: googleLabsIcon, usage: 'Experimental UI' },
+    { name: 'Antigravity', icon: antigravityIcon, filter: 'invert(1)', usage: 'Agentic Ideation' },
   ];
 
   const renderRing = (items, radius, offsetAngle = 0, duration = 30, reverse = false) => {
     return (
       <div 
-        className="absolute top-1/2 left-1/2 rounded-full border border-white/20 border-dashed shadow-[0_0_30px_rgba(255,255,255,0.02)_inset]"
+        className="absolute top-1/2 left-1/2 rounded-full border border-white/20 border-dashed shadow-[0_0_30px_rgba(255,255,255,0.02)_inset] pointer-events-none"
         style={{
           width: `${radius * 2}px`,
           height: `${radius * 2}px`,
@@ -63,14 +65,15 @@ export default function ToolsOrbit() {
               <div style={{ transform: `rotate(-${angle}deg)` }}>
                 {/* Icon Container with reverse orbit animation so it stays upright */}
                 <div 
-                  className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#0a0a0f] border border-white/10 flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.05)] cursor-pointer group hover:bg-[#151520] transition-colors"
+                  className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#0a0a0f] border border-white/10 flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.05)] cursor-pointer group hover:bg-[#151520] transition-colors pointer-events-auto"
                   style={{
                     animation: `orbit-reverse ${duration}s linear infinite ${reverse ? 'reverse' : 'normal'}`,
                   }}
                 >
                   {/* Tooltip on Hover */}
-                  <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-white/10 text-white text-[10px] md:text-xs uppercase font-mono px-3 py-1.5 rounded-lg backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50 shadow-xl border border-white/5">
-                    {item.name}
+                  <div className="absolute -top-14 left-1/2 -translate-x-1/2 bg-slate-900/95 text-white flex flex-col items-center px-4 py-2 rounded-lg backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50 shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/10">
+                    <span className="text-xs md:text-sm uppercase font-mono font-bold tracking-widest">{item.name}</span>
+                    <span className="text-[10px] md:text-xs text-indigo-300 tracking-wide mt-0.5 font-light">{item.usage}</span>
                   </div>
                   
                   <img 
@@ -92,6 +95,16 @@ export default function ToolsOrbit() {
 
   return (
     <section className="py-32 relative overflow-hidden bg-[#030712] border-t border-white/5 flex flex-col items-center justify-center min-h-[900px] md:min-h-[1100px]">
+      
+      {/* 3D Canvas Background */}
+      <div className="absolute inset-0 z-0 opacity-100 mix-blend-screen pointer-events-none">
+        <Canvas camera={{ position: [0, 0, 8] }}>
+          <ambientLight intensity={0.5} />
+          <Stars radius={100} depth={50} count={4000} factor={4} saturation={1} fade speed={1.5} />
+          <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.8} />
+        </Canvas>
+      </div>
+
       {/* Required CSS Animations */}
       <style>{`
         @keyframes orbit {
