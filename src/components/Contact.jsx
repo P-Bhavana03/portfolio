@@ -220,10 +220,10 @@ export default function Contact() {
                   </div>
 
                   {/* Submit Button */}
-                  <div className="flex justify-center pt-4">
+                  <div className="pt-4">
                     <button
                       type="submit"
-                      className="px-10 py-4 rounded-xl bg-white text-black hover:bg-slate-200 font-display font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] transition-all cursor-pointer"
+                      className="w-full py-4 rounded-xl bg-gradient-to-r from-indigo-500 to-pink-500 hover:from-indigo-600 hover:to-pink-600 text-white font-display font-black text-sm uppercase tracking-widest flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(99,102,241,0.5)] transition-all cursor-pointer"
                     >
                       Send Message
                       <Send className="w-4 h-4" />

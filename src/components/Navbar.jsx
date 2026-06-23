@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ArrowUpRight } from 'lucide-react';
+import { Menu, X, Download } from 'lucide-react';
 
 export default function Navbar({ isDark, toggleDark }) {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -85,11 +85,11 @@ export default function Navbar({ isDark, toggleDark }) {
         {/* Actions (CTA) */}
         <div className="hidden md:flex items-center gap-4">
           <button
-            onClick={() => scrollToSection('contact')}
+            onClick={() => alert("Resume download triggered! In production, this links to your PDF document.")}
             className="group px-5 py-2.5 rounded-full font-display font-medium text-sm flex items-center gap-1.5 bg-gradient-to-r from-indigo-500 to-pink-500 hover:from-indigo-600 hover:to-pink-600 text-white shadow-md hover:shadow-indigo-500/20 transition-all duration-300 cursor-pointer"
           >
-            Hire Me
-            <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            Resume
+            <Download className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
           </button>
         </div>
 
@@ -122,11 +122,11 @@ export default function Navbar({ isDark, toggleDark }) {
               </button>
             ))}
             <button
-              onClick={() => scrollToSection('contact')}
+              onClick={() => alert("Resume download triggered! In production, this links to your PDF document.")}
               className="mt-4 w-full py-3 rounded-xl font-display font-medium flex items-center justify-center gap-1.5 bg-gradient-to-r from-indigo-500 to-pink-500 text-white shadow-lg"
             >
-              Hire Me
-              <ArrowUpRight className="w-4 h-4" />
+              Resume
+              <Download className="w-4 h-4" />
             </button>
           </nav>
         </div>
