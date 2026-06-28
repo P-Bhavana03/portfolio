@@ -25,7 +25,8 @@ export default function Projects() {
       role: 'Lead Product Designer',
       icon: Activity,
       color: '#10b981',
-      gradient: 'from-emerald-500 to-teal-500',
+      cardBg: 'bg-[#0d291e]',
+      gradient: 'from-emerald-400 to-emerald-600',
       textColor: 'text-emerald-400',
       bgGlow: 'bg-emerald-500',
       metric: '0 Latency',
@@ -43,7 +44,8 @@ export default function Projects() {
       role: 'Senior UI Engineer',
       icon: ShoppingCart,
       color: '#6366f1',
-      gradient: 'from-indigo-500 to-blue-500',
+      cardBg: 'bg-[#171b35]',
+      gradient: 'from-indigo-400 to-indigo-600',
       textColor: 'text-indigo-400',
       bgGlow: 'bg-indigo-500',
       metric: '+18% Conv.',
@@ -60,10 +62,11 @@ export default function Projects() {
       tag: 'Product Design',
       role: 'Lead UI/UX Designer',
       icon: Brain,
-      color: '#ec4899',
-      gradient: 'from-pink-500 to-purple-500',
-      textColor: 'text-pink-400',
-      bgGlow: 'bg-pink-500',
+      color: '#d946ef',
+      cardBg: 'bg-[#2b172a]',
+      gradient: 'from-fuchsia-400 to-fuchsia-600',
+      textColor: 'text-fuchsia-400',
+      bgGlow: 'bg-fuchsia-500',
       metric: 'Dual-View',
       metricLabel: 'Side-by-side model testing',
       challenge: 'AI developers lacked a unified workspace to test prompts across different LLMs simultaneously, forcing them to switch tabs and lose context.',
@@ -79,7 +82,8 @@ export default function Projects() {
       role: 'Mobile UX Designer',
       icon: Radio,
       color: '#06b6d4',
-      gradient: 'from-cyan-500 to-blue-500',
+      cardBg: 'bg-[#0b2733]',
+      gradient: 'from-cyan-400 to-cyan-600',
       textColor: 'text-cyan-400',
       bgGlow: 'bg-cyan-500',
       metric: '4.8/5 Stars',
@@ -97,7 +101,8 @@ export default function Projects() {
       role: 'Frontend Architect',
       icon: Zap,
       color: '#f59e0b',
-      gradient: 'from-amber-500 to-orange-500',
+      cardBg: 'bg-[#3b2313]',
+      gradient: 'from-amber-400 to-amber-600',
       textColor: 'text-amber-400',
       bgGlow: 'bg-amber-500',
       metric: 'Live Sync',
@@ -110,43 +115,20 @@ export default function Projects() {
   ];
 
   // Helper to calculate the fan positioning
-  const getCardStyle = (index, isHovered, anyHovered) => {
+  const getCardStyle = (index) => {
     // Base layout: 5 cards
     const rotations = [-20, -10, 0, 10, 20];
-    const yOffsets = [60, 20, 0, 20, 60];
-    const xOffsets = [-240, -120, 0, 120, 240];
+    const yOffsets = [80, 25, 0, 25, 80];
+    const xOffsets = [-360, -180, 0, 180, 360];
+    // Center card on top, spreading outwards underneath
+    const zIndices = [10, 20, 30, 20, 10];
     
-    // When hovered, straighten it out, bring it up, scale it
-    if (isHovered) {
-      return {
-        rotate: 0,
-        y: -40,
-        x: xOffsets[index],
-        scale: 1.05,
-        zIndex: 50,
-        opacity: 1
-      };
-    }
-    
-    // When something else is hovered, push non-hovered slightly down and dim them
-    if (anyHovered) {
-      return {
-        rotate: rotations[index],
-        y: yOffsets[index] + 40,
-        x: xOffsets[index],
-        scale: 0.95,
-        zIndex: index,
-        opacity: 0.5
-      };
-    }
-
-    // Default state
     return {
       rotate: rotations[index],
       y: yOffsets[index],
       x: xOffsets[index],
       scale: 1,
-      zIndex: index,
+      zIndex: zIndices[index],
       opacity: 1
     };
   };
@@ -190,8 +172,7 @@ export default function Projects() {
           
           {projects.map((project, index) => {
             const isHovered = hoveredProject === index;
-            const anyHovered = hoveredProject !== null;
-            const style = getCardStyle(index, isHovered, anyHovered);
+            const style = getCardStyle(index);
             const Icon = project.icon;
             
             return (
@@ -233,20 +214,20 @@ export default function Projects() {
                 className="absolute w-[280px] h-[400px] md:w-[320px] md:h-[460px] rounded-[2rem] cursor-pointer shadow-2xl origin-bottom"
               >
                 {/* The Card Background/Glass */}
-                <div className="absolute inset-0 rounded-[2rem] overflow-hidden border border-white/20 bg-[#0a0a0a] backdrop-blur-xl">
-                  {/* Vibrant Gradient Background matching project color */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-20`} />
+                <div className="absolute inset-0 rounded-[2rem] overflow-hidden border border-white/10 bg-white/[0.04] backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+                  {/* Subtle Gradient Overlay */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-10 mix-blend-screen`} />
                   
                   {/* Subtle inner shadow/highlight for 3D card feel */}
                   <div className="absolute inset-0 rounded-[2rem] shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] pointer-events-none" />
 
                   {/* Card Content Container */}
-                  <div className="absolute inset-0 p-6 flex flex-col justify-between">
+                  <div className="absolute inset-0 py-6 px-8 flex flex-col justify-between">
                     
                     {/* Top: Icon & Title */}
                     <div>
                       <div className="flex items-start justify-between mb-6">
-                        <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${project.gradient} flex items-center justify-center shadow-lg border border-white/20`}>
+                        <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${project.gradient} flex items-center justify-center shadow-lg`}>
                           <Icon className="w-7 h-7 text-white drop-shadow-md" />
                         </div>
                         <span className="text-[10px] font-mono text-white/50 uppercase tracking-widest font-bold">
@@ -262,8 +243,8 @@ export default function Projects() {
                       </p>
                     </div>
 
-                    {/* Bottom: Impact Metric (Fades in more clearly on hover) */}
-                    <div className={`transition-all duration-500 transform ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-70'}`}>
+                    {/* Bottom: Impact Metric */}
+                    <div>
                       <div className="text-[10px] uppercase tracking-widest font-mono text-white/60 mb-1">
                         Business Impact
                       </div>
@@ -272,7 +253,7 @@ export default function Projects() {
                       </div>
 
                       {/* View Button */}
-                      <button className={`w-full py-3 rounded-xl bg-white text-black font-bold text-xs uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 ${isHovered ? 'shadow-[0_0_20px_rgba(255,255,255,0.3)]' : ''}`}>
+                      <button className="w-full py-3 rounded-xl bg-white text-black font-bold text-xs uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]">
                         Case Study <ArrowRight className="w-4 h-4" />
                       </button>
                     </div>
@@ -296,7 +277,7 @@ export default function Projects() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
               onClick={() => setSelectedProject(null)}
-              className="absolute inset-0 bg-black/90 backdrop-blur-xl cursor-pointer"
+              className="absolute inset-0 bg-black/40 backdrop-blur-sm cursor-pointer"
             />
             
             <motion.div 
@@ -304,10 +285,8 @@ export default function Projects() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 30, scale: 0.95 }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="relative w-full max-w-5xl h-[90vh] sm:h-auto sm:max-h-[90vh] bg-[#050505] rounded-[2rem] border border-white/10 shadow-2xl overflow-hidden flex flex-col z-10"
+              className="relative w-full max-w-5xl h-[90vh] sm:h-auto sm:max-h-[90vh] bg-white/[0.04] backdrop-blur-2xl rounded-[2rem] border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col z-10"
             >
-              <div className={`absolute top-0 left-0 right-0 h-2 bg-gradient-to-r ${selectedProject.gradient}`} />
-              
               <button
                 onClick={() => setSelectedProject(null)}
                 className="absolute top-6 right-6 p-3 rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-colors cursor-pointer border border-white/20 z-20 group"
@@ -318,7 +297,7 @@ export default function Projects() {
               <div className="overflow-y-auto custom-scrollbar p-8 sm:p-12 h-full">
                 <div className="max-w-3xl mb-16 relative z-10">
                   <div className="flex items-center gap-4 mb-6">
-                    <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${selectedProject.gradient} flex items-center justify-center shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/20`}>
+                    <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${selectedProject.gradient} flex items-center justify-center shadow-lg`}>
                       {React.createElement(selectedProject.icon, { className: "w-7 h-7 text-white" })}
                     </div>
                     <span className="px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-slate-400 uppercase tracking-widest">
